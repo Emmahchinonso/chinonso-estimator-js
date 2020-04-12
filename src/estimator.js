@@ -1,13 +1,13 @@
 const covid19ImpactEstimator = (data) => {
-  let input = data;
-  const {reportedCases} = input;
+  const input = data;
+  const { reportedCases } = input;
 
   function getCurrentlyInfected(factor) {
     return reportedCases * factor;
   }
 
   function getNumberInfectedByTime(time) {
-    const {currentlyInfected} = this;
+    const { currentlyInfected } = this;
     const factor = Math.trunc(time / 3);
     return currentlyInfected * (2 ** factor);
   }
