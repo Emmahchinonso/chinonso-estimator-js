@@ -8,12 +8,12 @@ const covid19ImpactEstimator = (data) => {
 
   function getNumberInfectedByTime(time) {
     let durationInDays = time;
-    if (periodType == 'weeks'){
+    if (periodType === 'weeks') {
       durationInDays = time * 7;
-    }else if (periodType == 'months'){
+    }else if (periodType === 'months') {
       durationInDays = time * 4 * 7;
     }
-    const factor = Math.trunc( durationInDays / 3 );
+    const factor = Math.trunc(durationInDays / 3);
     return 2 ** factor;
   }
 
