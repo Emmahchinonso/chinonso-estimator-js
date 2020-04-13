@@ -10,7 +10,7 @@ const covid19ImpactEstimator = (data) => {
     let durationInDays = time;
     if (periodType === 'weeks') {
       durationInDays = time * 7;
-    }else if (periodType === 'months') {
+    } else if (periodType === 'months') {
       durationInDays = time * 4 * 7;
     }
     const factor = Math.trunc(durationInDays / 3);
