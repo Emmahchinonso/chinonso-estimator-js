@@ -46,12 +46,12 @@ const covid19ImpactEstimator = (data) => {
 
   function getICUCases(type) {
     const numberOfICUCases = (5 * infectionsByGivenTime(type)) / 100;
-    return numberOfICUCases;
+    return Math.trunc(numberOfICUCases);
   }
 
   function getVentilatorCases(type) {
     const numberOfVentilatorCases = (2 * infectionsByGivenTime(type)) / 100;
-    return numberOfVentilatorCases;
+    return Math.trunc(numberOfVentilatorCases);
   }
 
   function getDollarsInFlight(type) {
