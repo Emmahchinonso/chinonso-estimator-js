@@ -30,7 +30,7 @@ const covid19ImpactEstimator = (data) => {
       infectionsByGivenTime = getCurrentlyInfected(50) * getNumberInfectedByTime(timeToElapse);
       numberOfSevereCases = (15 * infectionsByGivenTime) / 100;
     }
-    return numberOfSevereCases;
+    return Math.trunc(numberOfSevereCases);
   }
 
   function getAvailableBeds(type) {
