@@ -34,8 +34,8 @@ const covid19ImpactEstimator = (data) => {
   }
 
   function getAvailableBeds(type) {
-    const availabeBeds = Math.trunc((35 * totalHospitalBeds) / 100);
-    return availabeBeds - getSevereCases(type);
+    const availabeBeds = (35 * totalHospitalBeds) / 100;
+    return Math.trunc(availabeBeds - getSevereCases(type));
   }
 
   return {
