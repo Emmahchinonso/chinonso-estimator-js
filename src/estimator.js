@@ -14,7 +14,7 @@ const covid19ImpactEstimator = (data) => {
     return reportedCases * factor;
   }
 
-  function getDurationInDays(time){
+  function getDurationInDays(time) {
     let durationInDays = time;
     if (periodType === 'weeks') {
       durationInDays = time * 7;
