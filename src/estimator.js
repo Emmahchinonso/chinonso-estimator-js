@@ -6,12 +6,15 @@ const covid19ImpactEstimator = (data) => {
     periodType,
     totalHospitalBeds
   } = input;
-
+  const {
+    avgDailyIncomeInUSD,
+    avgDailyIncomePopulation
+  } = input.data.region;
   function getCurrentlyInfected(factor) {
     return reportedCases * factor;
   }
 
-  function getNumberInfectedByTime(time) {
+  function multiplicationFactor(time) {
     let durationInDays = time;
     if (periodType === 'weeks') {
       durationInDays = time * 7;
@@ -23,13 +26,16 @@ const covid19ImpactEstimator = (data) => {
     return 2 ** factor;
   }
 
-  function getSevereCases(type) {
-    let infectionsByGivenTime = getCurrentlyInfected(10) * getNumberInfectedByTime(timeToElapse);
-    let numberOfSevereCases = (15 * infectionsByGivenTime) / 100;
+  function infectionsByGivenTime(type) {
+    let numbersInfected = getCurrentlyInfected(10) * multiplicationFactor(timeToElapse);
     if (type !== 'impact') {
-      infectionsByGivenTime = getCurrentlyInfected(50) * getNumberInfectedByTime(timeToElapse);
-      numberOfSevereCases = (15 * infectionsByGivenTime) / 100;
+      numbersInfected = getCurrentlyInfected(50) * multiplicationFactor(timeToElapse);
     }
+    return numbersInfected;
+  }
+
+  function getSevereCases(type) {
+    const numberOfSevereCases = (15 * infectionsByGivenTime(type)) / 100;
     return Math.trunc(numberOfSevereCases);
   }
 
@@ -38,19 +44,40 @@ const covid19ImpactEstimator = (data) => {
     return Math.trunc(availabeBeds - getSevereCases(type));
   }
 
+  function getICUCases(type) {
+    const numberOfICUCases = (5 * infectionsByGivenTime(type)) / 100;
+    return numberOfICUCases;
+  }
+
+  function getVentilatorCases(type) {
+    const numberOfVentilatorCases = (2 * infectionsByGivenTime(type)) / 100;
+    return numberOfVentilatorCases;
+  }
+
+  function getDollarsInFlight(type) {
+    const Loss = (infectionsByGivenTime(type) * avgDailyIncomePopulation * avgDailyIncomeInUSD);
+    return Math.trunc(Loss / timeToElapse);
+  }
+
   return {
     data: input,
     impact: {
       currentlyInfected: getCurrentlyInfected(10),
-      infectionsByRequestedTime: getCurrentlyInfected(10) * getNumberInfectedByTime(timeToElapse),
+      infectionsByRequestedTime: infectionsByGivenTime('impact'),
       severeCasesByRequestedTime: getSevereCases('impact'),
-      hospitalBedsByRequestedTime: getAvailableBeds('impact')
+      hospitalBedsByRequestedTime: getAvailableBeds('impact'),
+      casesForICUByRequestedTime: getICUCases('impact'),
+      casesForVentilatorsByRequestedTime: getVentilatorCases('impact'),
+      dollarsInFlight: getDollarsInFlight('impact')
     },
     severeImpact: {
       currentlyInfected: getCurrentlyInfected(50),
-      infectionsByRequestedTime: getCurrentlyInfected(50) * getNumberInfectedByTime(timeToElapse),
+      infectionsByRequestedTime: infectionsByGivenTime('severeImpact'),
       severeCasesByRequestedTime: getSevereCases('severeImpact'),
-      hospitalBedsByRequestedTime: getAvailableBeds('severeImpact')
+      hospitalBedsByRequestedTime: getAvailableBeds('severeImpact'),
+      casesForICUByRequestedTime: getICUCases('severeImpact'),
+      casesForVentilatorsByRequestedTime: getVentilatorCases('severeImpact'),
+      dollarsInFlight: getDollarsInFlight('severeImpact')
     }
   };
 };
