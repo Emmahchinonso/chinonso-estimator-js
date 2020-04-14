@@ -9,7 +9,7 @@ const covid19ImpactEstimator = (data) => {
   const {
     avgDailyIncomeInUSD,
     avgDailyIncomePopulation
-  } = input.data.region;
+  } = input.region;
   function getCurrentlyInfected(factor) {
     return reportedCases * factor;
   }
