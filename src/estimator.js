@@ -1,6 +1,11 @@
 const covid19ImpactEstimator = (data) => {
   const input = data;
-  const { reportedCases, timeToElapse, periodType, totalHospitalBeds } = input;
+  const { 
+    reportedCases, 
+    timeToElapse, 
+    periodType, 
+    totalHospitalBeds 
+  } = input;
 
   function getCurrentlyInfected(factor) {
     return reportedCases * factor;
@@ -18,14 +23,14 @@ const covid19ImpactEstimator = (data) => {
     return 2 ** factor;
   }
 
-  function getSevereCases(type){
+  function getSevereCases(type) {
     if (type === 'impact') return Math.trunc((15 * (getCurrentlyInfected(10) * getNumberInfectedByTime(timeToElapse))) / 100);
     return Math.trunc((15 * (getCurrentlyInfected(50) * getNumberInfectedByTime(timeToElapse))) / 100);
   }
 
   function getAvailableBeds(type){
     const availabeBeds = Math.trunc((35 * totalHospitalBeds) / 100);
-    return  availabeBeds - getSevereCases(type);
+    return availabeBeds - getSevereCases(type);
   }
 
   return {
