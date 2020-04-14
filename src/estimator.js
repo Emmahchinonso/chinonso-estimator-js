@@ -14,7 +14,7 @@ const covid19ImpactEstimator = (data) => {
     return reportedCases * factor;
   }
 
-  function multiplicationFactor(time) {
+  function getDurationInDays(time){
     let durationInDays = time;
     if (periodType === 'weeks') {
       durationInDays = time * 7;
@@ -22,7 +22,11 @@ const covid19ImpactEstimator = (data) => {
       // 30.4167days is == 1month
       durationInDays = Math.trunc(time * 30.4167);
     }
-    const factor = Math.trunc(durationInDays / 3);
+    return durationInDays;
+  }
+
+  function multiplicationFactor(time) {
+    const factor = Math.trunc(getDurationInDays(time) / 3);
     return 2 ** factor;
   }
 
@@ -56,7 +60,7 @@ const covid19ImpactEstimator = (data) => {
 
   function getDollarsInFlight(type) {
     const Loss = (infectionsByGivenTime(type) * avgDailyIncomePopulation * avgDailyIncomeInUSD);
-    return Math.trunc(Loss / timeToElapse);
+    return Math.trunc(Loss / getDurationInDays(timeToElapse));
   }
 
   return {
